@@ -113,12 +113,12 @@ resource "aws_lb_target_group" "api" {
   tags                 = var.tags
 
   health_check {
-    enabled             = true
-    path                = "/"
-    interval            = 6
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 3
+    enabled             = var.lb_health_check_enabled
+    path                = var.lb_health_check_path
+    interval            = var.lb_health_check_interval
+    timeout             = var.lb_health_check_timeout
+    healthy_threshold   = var.lb_health_check_healthy_threshold
+    unhealthy_threshold = var.lb_health_check_unhealthy_threshold
   }
 }
 

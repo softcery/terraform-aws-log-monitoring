@@ -74,3 +74,50 @@ variable "api-env" {
   sensitive   = false
   default     = []
 }
+
+variable "tdf_memory_reservation" {
+  description = "represents amount of memory reservation fot task definition"
+  type        = number
+}
+
+variable "tdf_memory" {
+  description = "represents amount of memory for task definition"
+  type        = number
+}
+
+
+
+variable "lb_health_check_enabled" {
+  description = "should lb perform health checks"
+  type        = bool
+}
+
+variable "lb_health_check_path" {
+  description = "represents health checks path"
+  type        = string
+  default     = "/"
+}
+
+variable "lb_health_check_interval" {
+  description = "represents health checks interval"
+  type        = number
+  default     = 6
+}
+
+variable "lb_health_check_timeout" {
+  description = "represents health check timeout"
+  type        = number
+  default     = 5
+}
+
+variable "lb_health_check_healthy_threshold" {
+  description = "represents health checks healthy threshold"
+  type        = number
+  default     = 2
+}
+
+variable "lb_health_check_unhealthy_threshold" {
+  description = "represents health checks unhealthy threshold"
+  type        = number
+  default     = 3
+}

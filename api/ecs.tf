@@ -49,7 +49,8 @@ resource "aws_ecs_task_definition" "api" {
       image = var.image_name
       name  = var.name
 
-      memoryReservation = 8
+      memoryReservation = var.tdf_memory_reservation
+      memory            = var.tdf_memory
 
       portMappings = [{
         containerPort = var.container_port
