@@ -10,8 +10,8 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "subscription-filter" {
-  name            = "filter-${var.postfix}"
-  
+  name = "filter-${var.postfix}"
+
   log_group_name  = each.value
   filter_pattern  = "{ $.severity = \"ERROR\" }"
   destination_arn = module.lambda.lambda_function_arn

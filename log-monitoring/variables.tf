@@ -1,13 +1,13 @@
 # module variables
 variable "log_groups" {
-  type = list(string)
+  type        = list(string)
   description = "Names of log groups for which subscription filters will be created"
 }
 
 variable "postfix" {
-  type    = string
+  type        = string
   description = "Optional postfix to add to names of created resources"
-  default = ""
+  default     = ""
 }
 
 # arn:aws:logs:us-east-2:123456789:

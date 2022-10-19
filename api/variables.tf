@@ -65,5 +65,12 @@ variable "container_port" {
 
 variable "region" {
   description = "region to stream ecs logs to"
-  type = string
+  type        = string
+}
+
+variable "api-env" {
+  description = "represents environment, example: staging"
+  type        = list(object({ name : string, value = string }))
+  sensitive   = false
+  default     = []
 }
