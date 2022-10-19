@@ -85,8 +85,6 @@ variable "tdf_memory" {
   type        = number
 }
 
-
-
 variable "lb_health_check_enabled" {
   description = "should lb perform health checks"
   type        = bool
