@@ -3,7 +3,9 @@ module "lambda" {
   version = "~> 4.0"
 
   function_name = "cron-lambda-${var.postfix}"
-  source_path   = [var.source_path]
+  source_path = [
+    "${path.module}/index.js"
+  ]
   description   = "Cron Lambda"
   handler       = var.handler
   runtime       = var.runtime

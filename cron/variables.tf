@@ -30,11 +30,6 @@ variable "postfix" {
   default     = ""
 }
 
-variable "source_path" {
-  type        = string
-  description = "represents source code path for lambda"
-}
-
 variable "runtime" {
   type        = string
   description = "represents lambda function runtime environment"
