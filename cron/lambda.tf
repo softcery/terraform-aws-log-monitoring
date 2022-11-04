@@ -4,8 +4,9 @@ module "lambda" {
 
   function_name = "cron-lambda-${var.postfix}"
   source_path = [
-    "${path.module}/index.js"
+    "${path.module}/src"
   ]
+
   description   = "Cron Lambda"
   handler       = var.handler
   runtime       = var.runtime
@@ -16,7 +17,6 @@ module "lambda" {
 
   environment_variables = merge(tomap({
     HOSTNAME = var.env_hostname,
-    PATH     = var.env_path,
     METHOD = var.env_method }),
     var.env
   )

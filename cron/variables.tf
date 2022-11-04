@@ -9,11 +9,6 @@ variable "env_hostname" {
   description = "represents hostname of the resource"
 }
 
-variable "env_path" {
-  type        = string
-  description = "represents path"
-}
-
 variable "env_method" {
   type        = string
   description = "represents HTTP request method"
