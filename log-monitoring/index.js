@@ -2,48 +2,10 @@ const zlib = require('zlib');
 const https = require('https');
 
 const SLACK_ENDPOINT = process.env.SLACK_ENDPOINT;
-const SLACK_BOT = 'Cloudwatch';
+const SLACK_CHANNEL = process.env.SLACK_CHANNEL
 
-function createMessage(obj) {
-  let error;
-  const log = JSON.parse(obj.message);
-  console.log(JSON.stringify(log));
-  error = log.err;
-  if (typeof log.err === 'undefined') {
-    error = '';
-  } else if (typeof log.err === 'object') {
-    error = JSON.stringify(log.err[0]);
-  }
-
-  const message = {
-    "channel": `${process.env.SLACK_CHANNEL}`,
-    "attachments": [
-      {
-	      "mrkdwn_in": ["text"],
-          "color": "#FF0000",
-          "text": `${log.name}`,
-          "fields": [
-            {
-              "title": "Details",
-              "value": `${log.message} - ${error}`,
-              "short": false
-            },
-            {
-              "title": "Request ID",
-              "value": `${log.RequestID}`,
-              "short": false
-            }
-          ]
-      }
-    ]
-  }
-
-  console.log(JSON.stringify(message));
-  return message;
-}
-
-function doRequest(logs) {
-  const payloadStr = JSON.stringify(createMessage(logs));
+function doRequest(message) {
+  const payloadStr = JSON.stringify(message);
   const options = {
     hostname: 'hooks.slack.com',
     port: 443,
@@ -84,18 +46,51 @@ function doRequest(logs) {
   postReq.end();
 }
 
-function main(input, context) {
-  context.callbackWaitsForEmptyEventLoop = true;
+function createMessage(logevent, name) {
+  const log = JSON.parse(logevent.message)
+  const message = {
+    "channel": SLACK_CHANNEL,
+    "attachments": [
+      {
+	      "mrkdwn_in": ["text"],
+          "color": "#FF0000",
+          "text": name,
+          "fields": [
+            {
+              "title": "Details",
+              "value": `${log.message} - ${log.err}`,
+              "short": false
+            },
+            {
+              "title": "Request ID",
+              "value": `${log.RequestID}`,
+              "short": false
+            }
+          ]
+      }
+    ]
+  }
 
-  const payload = Buffer.from(input.awslogs.data, 'base64');
-  const logs = JSON.parse(zlib.gunzipSync(payload).toString('utf8'));
+  console.log(log)
+  console.log(JSON.stringify(message));
 
-  doRequest(logs.logEvents[0]);
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify('Event sent to Slack!'),
-  };
-  return response;
+  return message;
 }
 
-exports.handler = main;
+function getName(logevent) {
+  const log = JSON.parse(logevent.message);
+  return log.name;
+}
+
+exports.handler = async (event, context) => {
+  if (event.awslogs && event.awslogs.data) {
+    const payload = Buffer.from(event.awslogs.data, 'base64');
+    const logevents = JSON.parse(zlib.unzipSync(payload).toString()).logEvents;
+
+    const name = getName(logevents[0]);
+    const logevent = logevents[logevents.length - 1];
+
+    const message = createMessage(logevent, name);
+    doRequest(message)
+  }
+};
