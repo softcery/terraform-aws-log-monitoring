@@ -13,6 +13,13 @@ function main(input, context) {
   
   fetch(HOSTNAME, requestOptions).then((response) => {
     console.log(response.status);
+    if (response.status != 200) {
+      const message = {
+        "message": "Failed to send request",
+        "err": `Status Code: ${response.status}`,
+        "Request ID": 0
+      }
+    }
   });
   return 0;
 }
