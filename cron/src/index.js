@@ -1,9 +1,16 @@
 const fetch = require('node-fetch')
+const util = require('util')
 
 const HOSTNAME = process.env.HOSTNAME;
 const METHOD = process.env.METHOD
 
 function main(input, context) {
+  console.error = function () {
+    var args = Array.prototype.slice.call(arguments)
+    process.stderr.write(args.map(function (arg) {
+      return util.isPrimitive(arg) ? String(arg) : util.inspect(arg)
+    }).join(' '))
+  }
   const requestOptions = {
     method: METHOD,
     headers: {
@@ -14,14 +21,10 @@ function main(input, context) {
   fetch(HOSTNAME, requestOptions).then((response) => {
     console.log(response.status);
     if (response.status != 200) {
-      const message = {
-        "message": "Failed to send request",
-        "err": `Status Code: ${response.status}`,
-        "Request ID": 0
-      }
+      let message = {"severity": "ERROR", "message": "Failed to send request","err": `Status Code: ${response.status}`,"RequestID": "0"};
+      console.error(JSON.stringify(message));
     }
   });
-  return 0;
 }
 
 exports.handler = main;
