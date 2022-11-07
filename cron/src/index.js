@@ -21,7 +21,7 @@ function main(input, context) {
   fetch(HOSTNAME, requestOptions).then((response) => {
     console.log(response.status);
     if (response.status != 200) {
-      let message = {"severity": "ERROR", "message": "Failed to send request","err": `Status Code: ${response.status}`,"RequestID": "0"};
+      let message = {"severity": "ERROR", "name": "CronJob", "message": "Failed to send request","err": `Status Code: ${response.status}`,"RequestID": "0"};
       console.error(JSON.stringify(message));
     }
   });
