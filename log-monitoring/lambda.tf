@@ -4,7 +4,7 @@ module "lambda" {
 
   function_name = "lambda-${var.postfix}"
   source_path = [
-    "${path.module}/index.js"
+    "${path.module}/src"
   ]
   description = "Lambda to process API error logs and send notifications to Slack"
   handler     = "index.handler"

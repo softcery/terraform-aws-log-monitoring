@@ -82,7 +82,7 @@ function getName(logevent) {
   return log.name;
 }
 
-exports.handler = async (event, context) => {
+exports.handler = (event, context) => {
   if (event.awslogs && event.awslogs.data) {
     const payload = Buffer.from(event.awslogs.data, 'base64');
     const logevents = JSON.parse(zlib.unzipSync(payload).toString()).logEvents;
