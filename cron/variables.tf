@@ -14,6 +14,11 @@ variable "env_method" {
   description = "represents HTTP request method"
 }
 
+variable "env_environment" {
+  type        = string
+  description = "represents environment in which cron is deployed"
+}
+
 variable "interval" {
   type        = string
   description = "represents interval with which lambda will be called"

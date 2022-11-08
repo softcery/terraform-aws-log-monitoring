@@ -3,6 +3,7 @@ const util = require('util')
 
 const HOSTNAME = process.env.HOSTNAME;
 const METHOD = process.env.METHOD
+const ENVIRONMENT = process.env.ENVIRONMENT
 
 function main(input, context) {
   console.error = function () {
@@ -21,7 +22,14 @@ function main(input, context) {
   fetch(HOSTNAME, requestOptions).then((response) => {
     console.log(response.status);
     if (response.status != 200) {
-      let message = {"severity": "ERROR", "name": "CronJob", "message": "Failed to send request","err": `Status Code: ${response.status}`,"RequestID": "0"};
+      let message = {
+        "severity": "ERROR",
+        "name": "refresh eye4fraud orders",
+        "message": `Failed to send request - ${ENVIRONMENT}`,
+        "err": `Status Code: ${response.status}`,
+        "RequestID": "0"
+    };
+
       console.error(JSON.stringify(message));
     }
   });
