@@ -25,7 +25,7 @@ function main(input, context) {
       let message = {
         "severity": "ERROR",
         "name": "refresh eye4fraud orders",
-        "message": `Failed to send request(${ENVIRONMENT}) - `,
+        "message": `Failed to send request(${ENVIRONMENT})`,
         "err": `Status Code: ${response.status}`,
         "RequestID": "0"
     };
