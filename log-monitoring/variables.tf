@@ -29,6 +29,7 @@ variable "slack_channel" {
 variable "use_last_index" {
   type        = string
   description = "represents whether to retrieve logs from first or last element in input"
+  default     = "true"
 }
 
 variable "env" {
