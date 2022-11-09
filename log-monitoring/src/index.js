@@ -2,7 +2,8 @@ const zlib = require('zlib');
 const https = require('https');
 
 const SLACK_ENDPOINT = process.env.SLACK_ENDPOINT;
-const SLACK_CHANNEL = process.env.SLACK_CHANNEL
+const SLACK_CHANNEL = process.env.SLACK_CHANNEL;
+const USE_LAST_INDEX = (process.env.USE_LAST_INDEX == 'true');
 
 function doRequest(message) {
   const payloadStr = JSON.stringify(message);
@@ -88,7 +89,8 @@ exports.handler = (event, context) => {
     const logevents = JSON.parse(zlib.unzipSync(payload).toString()).logEvents;
 
     const name = getName(logevents[0]);
-    const logevent = logevents[logevents.length - 1];
+    const logIndex = USE_LAST_INDEX ? (logevents.length - 1) : 0;
+    const logevent = logevents[logIndex];
 
     const message = createMessage(logevent, name);
     doRequest(message)

@@ -16,7 +16,8 @@ module "lambda" {
 
   environment_variables = merge(tomap({
     SLACK_ENDPOINT = var.slack_endpoint,
-    SLACK_CHANNEL = var.slack_channel }),
+    SLACK_CHANNEL  = var.slack_channel,
+    USE_LAST_INDEX = var.use_last_index }),
     var.env
   )
 }

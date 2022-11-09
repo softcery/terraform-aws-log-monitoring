@@ -26,6 +26,11 @@ variable "slack_channel" {
   description = "To which Slack channel notifications will be sent"
 }
 
+variable "use_last_index" {
+  type        = string
+  description = "represents whether to retrieve logs from first or last element in input"
+}
+
 variable "env" {
   type        = map(string)
   description = "Lambda environment variables"
