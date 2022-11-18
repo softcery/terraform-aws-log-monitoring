@@ -4,6 +4,7 @@ const https = require('https');
 const SLACK_ENDPOINT = process.env.SLACK_ENDPOINT;
 const SLACK_CHANNEL = process.env.SLACK_CHANNEL;
 const USE_LAST_INDEX = (process.env.USE_LAST_INDEX == 'true');
+const ENVIRONMENT = process.env.ENVIRONMENT
 
 function doRequest(message) {
   const payloadStr = JSON.stringify(message);
@@ -65,6 +66,11 @@ function createMessage(logevent, name) {
             {
               "title": "Request ID",
               "value": `${log.RequestID}`,
+              "short": false
+            },
+            {
+              "title": "Enviornment",
+              "value": `${ENVIRONMENT}`,
               "short": false
             }
           ]
