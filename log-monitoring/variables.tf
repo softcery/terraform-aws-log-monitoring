@@ -32,6 +32,11 @@ variable "use_last_index" {
   default     = "true"
 }
 
+variable "environment" {
+  type        = string
+  description = "represents environment in which application is deployed"
+}
+
 variable "env" {
   type        = map(string)
   description = "Lambda environment variables"
