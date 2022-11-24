@@ -1,5 +1,5 @@
 const zlib = require('zlib');
-const https = require('https');
+const fetch = require('node-fetch');
 
 const SLACK_ENDPOINT = process.env.SLACK_ENDPOINT;
 const SLACK_CHANNEL = process.env.SLACK_CHANNEL;
@@ -8,47 +8,26 @@ const ENVIRONMENT = process.env.ENVIRONMENT
 
 function doRequest(message) {
   const payloadStr = JSON.stringify(message);
-  const options = {
-    hostname: 'hooks.slack.com',
-    port: 443,
-    path: SLACK_ENDPOINT,
+  const requestOptions = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(payloadStr),
-    },
+    }
   };
 
-  const postReq = https.request(options, (res) => {
-    const chunks = [];
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => chunks.push(chunk));
-    res.on('end', () => {
-      if (res.statusCode < 400) {
-        console.log('sent!!!');
-      } else if (res.statusCode < 500) {
-        console.error(
-          `Error posting message to Slack API: ${
-            res.statusCode
-          } - ${
-            res.statusMessage}`,
-        );
-      } else {
-        console.error(
-          `Server error when processing message: ${
-            res.statusCode
-          } - ${
-            res.statusMessage}`,
-        );
-      }
-    });
-    return res;
+  const hostname = `https://hooks.slack.com${SLACK_ENDPOINT}`;
+
+  fetch(hostname, requestOptions).then((response) => {
+    console.log(response.status);
+    if (response.status != 200) {
+      let message = `Failed to send notification to Slack; ERROR: ${response.status}`
+      console.error(JSON.stringify(message));
+    }
   });
-  postReq.write(payloadStr);
-  postReq.end();
 }
 
-function createMessage(logevent, name) {
+function createMessage(logevent, name, requestId) {
   const log = JSON.parse(logevent.message)
   const message = {
     "channel": SLACK_CHANNEL,
@@ -65,7 +44,7 @@ function createMessage(logevent, name) {
             },
             {
               "title": "Request ID",
-              "value": `${log.RequestID}`,
+              "value": `${requestId}`,
               "short": false
             },
             {
@@ -89,16 +68,22 @@ function getName(logevent) {
   return log.name;
 }
 
+function getRequestId(logevent) {
+  const log = JSON.parse(logevent.message);
+  return log.RequestID;
+}
+
 exports.handler = (event, context) => {
   if (event.awslogs && event.awslogs.data) {
     const payload = Buffer.from(event.awslogs.data, 'base64');
     const logevents = JSON.parse(zlib.unzipSync(payload).toString()).logEvents;
 
     const name = getName(logevents[0]);
+    const requestId = getRequestId(logevents[0]);
     const logIndex = USE_LAST_INDEX ? (logevents.length - 1) : 0;
     const logevent = logevents[logIndex];
 
-    const message = createMessage(logevent, name);
+    const message = createMessage(logevent, name, requestId);
     doRequest(message)
   }
 };
