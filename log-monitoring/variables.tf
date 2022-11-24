@@ -37,6 +37,11 @@ variable "environment" {
   description = "represents environment in which application is deployed"
 }
 
+variable "log_level" {
+  type        = string
+  description = "represents logs severity level to process"
+}
+
 variable "env" {
   type        = map(string)
   description = "Lambda environment variables"

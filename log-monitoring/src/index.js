@@ -4,14 +4,28 @@ const fetch = require('node-fetch');
 const SLACK_ENDPOINT = process.env.SLACK_ENDPOINT;
 const SLACK_CHANNEL = process.env.SLACK_CHANNEL;
 const USE_LAST_INDEX = (process.env.USE_LAST_INDEX == 'true');
-const ENVIRONMENT = process.env.ENVIRONMENT
+const ENVIRONMENT = process.env.ENVIRONMENT;
+const LEVEL = process.env.LEVEL;
+
+let color;
+switch (LEVEL) {
+  case 'ERROR':
+    color = "#FF0000";
+    break;
+  case 'WARN':
+    color = "#FFFF00";
+    break;
+  default:
+    color = "#0000FF";
+}
 
 function doRequest(message) {
   const payloadStr = JSON.stringify(message);
   const requestOptions = {
     method: 'POST',
+    body: payloadStr,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'Content-Length': Buffer.byteLength(payloadStr),
     }
   };
@@ -21,20 +35,20 @@ function doRequest(message) {
   fetch(hostname, requestOptions).then((response) => {
     console.log(response.status);
     if (response.status != 200) {
-      let message = `Failed to send notification to Slack; ERROR: ${response.status}`
+      let message = `Failed to send notification to Slack; ERROR: ${response.status}`;
       console.error(JSON.stringify(message));
     }
   });
 }
 
 function createMessage(logevent, name, requestId) {
-  const log = JSON.parse(logevent.message)
+  const log = JSON.parse(logevent.message);
   const message = {
     "channel": SLACK_CHANNEL,
     "attachments": [
       {
 	      "mrkdwn_in": ["text"],
-          "color": "#FF0000",
+          "color": color,
           "text": name,
           "fields": [
             {
@@ -77,7 +91,7 @@ exports.handler = (event, context) => {
   if (event.awslogs && event.awslogs.data) {
     const payload = Buffer.from(event.awslogs.data, 'base64');
     const logevents = JSON.parse(zlib.unzipSync(payload).toString()).logEvents;
-
+    
     const name = getName(logevents[0]);
     const requestId = getRequestId(logevents[0]);
     const logIndex = USE_LAST_INDEX ? (logevents.length - 1) : 0;

@@ -18,7 +18,8 @@ module "lambda" {
     SLACK_ENDPOINT = var.slack_endpoint,
     SLACK_CHANNEL  = var.slack_channel,
     USE_LAST_INDEX = var.use_last_index,
-    ENVIRONMENT    = var.environment, }),
+    LEVEL          = var.log_level
+    ENVIRONMENT = var.environment, }),
     var.env
   )
 }
