@@ -42,7 +42,6 @@ def getCostAndUsage(previous, period):
     return round(float(cost['ResultsByTime'][0]['Total']['UnblendedCost']['Amount']), 2)
 
 def createPayload(period, slackChannel, currentCost, previousCost):
-    currentCost = getCostAndUsage()
     period = "week" if (period == 7) else "month"
 
     value = f"""Total cost over this {period} - {currentCost}
