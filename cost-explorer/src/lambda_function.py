@@ -13,9 +13,9 @@ slack_endpoint = os.environ['SLACK_ENDPOINT']
 slack_channel = os.environ['SLACK_CHANNEL']
 
 def getDiffrenceInPercent(current, previous, period):
-    dif = round((previous - current) / current * 100, 2)
+    dif = round((current - previous) / previous * 100, 2)
     period = "week" if (period == 7) else "month"
-    result = f"Up {dif}% over last {period}" if (dif > 0.0) else f"Down {-dif}% over last {period}"
+    result = f"Up *${dif}%* over last {period}" if (dif > 0.0) else f"Down *${-dif}%* over last {period}"
     return result
 
 def getCostAndUsage(previous, period):
@@ -44,8 +44,7 @@ def getCostAndUsage(previous, period):
 def createPayload(period, slackChannel, currentCost, previousCost):
     period = "week" if (period == 7) else "month"
 
-    value = f"""Total cost over this {period} - {currentCost}
-    {getDiffrenceInPercent(currentCost, previousCost, period)}"""
+    value = f"Total cost over this {period} - *${currentCost}*\nTotal cost over last {period} - *${previousCost}*\n{getDiffrenceInPercent(currentCost, previousCost, period)}"
 
     payload = {
         "channel": slackChannel,
@@ -76,6 +75,5 @@ def lambda_handler(event, context):
     currentCost = getCostAndUsage(False, period)
     previousCost = getCostAndUsage(True, period)
     payload = createPayload(period, slack_channel, currentCost, previousCost)
+    print(currentCost, previousCost, payload)
     sendNotificationToSlack(payload, slack_endpoint)
-
-lambda_handler(0, 0)
