@@ -19,15 +19,13 @@ def getDiffrenceInPercent(current, previous, period):
     return result
 
 def getCostAndUsage(previous, period):
-    now = datetime(2022, 10, 4)
-    #now = datetime.now()
+    now = datetime.now()
 
     if (period == 30): 
-        # there's not always 30 days in a month
-        sub = 1 if previous else 0
-        m = now.month - sub
-        start_date = (now).strftime(f'%Y-{m}-01')
-        end_date = (now - timedelta(days = 1)).strftime(f'%Y-{m}-%d')
+        sub = 1 if (previous) else 0
+        date = datetime(now.year, now.month - sub, now.day) - timedelta(days = 1)
+        start_date = date.strftime('%Y-%m-01')
+        end_date = date.strftime('%Y-%m-%d')
     else:
         start_date = (now - timedelta(days=period)).strftime(f'%Y-%m-%d')
         end_date = now.strftime('%Y-%m-%d')
@@ -36,6 +34,7 @@ def getCostAndUsage(previous, period):
             start_date = (now - timedelta(days = period * 2)).strftime(f'%Y-%m-%d')
 
     print(start_date, end_date)
+    return 1
     cost = client.get_cost_and_usage(
         TimePeriod = {'Start': start_date, 'End': end_date}, 
         Granularity = 'MONTHLY',
@@ -78,6 +77,7 @@ def sendNotificationToSlack(payload, url):
 def lambda_handler(event, context):
     currentCost = getCostAndUsage(False, period)
     previousCost = getCostAndUsage(True, period)
-    payload = createPayload(period, slack_channel, currentCost, previousCost)
-    sendNotificationToSlack(payload, slack_endpoint)
-    
+    #payload = createPayload(period, slack_channel, currentCost, previousCost)
+    #sendNotificationToSlack(payload, slack_endpoint)
+
+lambda_handler(0, 0)
