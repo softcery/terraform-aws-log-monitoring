@@ -15,7 +15,7 @@ slack_channel = os.environ['SLACK_CHANNEL']
 def getDiffrenceInPercent(current, previous, period):
     dif = round((current - previous) / previous * 100, 2)
     period = "week" if (period == 7) else "month"
-    result = f"Up *${dif}%* over last {period}" if (dif > 0.0) else f"Down *${-dif}%* over last {period}"
+    result = f"Up *{dif}%* over last {period}" if (dif > 0.0) else f"Down *{-dif}%* over last {period}"
     return result
 
 def getCostAndUsage(previous, period):
