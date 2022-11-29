@@ -45,7 +45,7 @@ def createPayload(period, slackChannel, currentCost, previousCost):
     period = "week" if (period == 7) else "month"
 
     value = f"""Total cost over this {period} - {currentCost}
-    {getDiffrenceInPercent(currentCost, previousCost)}"""
+    {getDiffrenceInPercent(currentCost, previousCost, period)}"""
 
     payload = {
         "channel": slackChannel,
