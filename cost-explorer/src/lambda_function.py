@@ -34,7 +34,6 @@ def getCostAndUsage(previous, period):
             start_date = (now - timedelta(days = period * 2)).strftime(f'%Y-%m-%d')
 
     print(start_date, end_date)
-    return 1
     cost = client.get_cost_and_usage(
         TimePeriod = {'Start': start_date, 'End': end_date}, 
         Granularity = 'MONTHLY',
@@ -77,7 +76,7 @@ def sendNotificationToSlack(payload, url):
 def lambda_handler(event, context):
     currentCost = getCostAndUsage(False, period)
     previousCost = getCostAndUsage(True, period)
-    #payload = createPayload(period, slack_channel, currentCost, previousCost)
-    #sendNotificationToSlack(payload, slack_endpoint)
+    payload = createPayload(period, slack_channel, currentCost, previousCost)
+    sendNotificationToSlack(payload, slack_endpoint)
 
 lambda_handler(0, 0)
