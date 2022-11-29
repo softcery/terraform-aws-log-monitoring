@@ -7,11 +7,6 @@ terraform {
   }
 }
 
-# Configure the AWS Provider
-provider "aws" {
-  region = "eu-central-1"
-}
-
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "~> 4.0"
