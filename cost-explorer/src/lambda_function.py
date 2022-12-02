@@ -12,10 +12,10 @@ period = int(os.environ['PERIOD'])
 slack_endpoint = os.environ['SLACK_ENDPOINT']
 slack_channel = os.environ['SLACK_CHANNEL']
 
-def getDiffrenceInPercent(current, previous, period):
+def getDiffrenceInPercent(current, previous, periodArg):
     dif = round((current - previous) / previous * 100, 2)
-    period = "week" if (period == 7) else "month"
-    result = f"Up *{dif}%* over last {period}" if (dif > 0.0) else f"Down *{-dif}%* over last {period}"
+    periodArg = "week" if (periodArg == 7) else "month"
+    result = f"Up *{dif}%* over last {periodArg}" if (dif > 0.0) else f"Down *{-dif}%* over last {periodArg}"
     return result
 
 def getCostAndUsage(previous, period):
@@ -51,10 +51,10 @@ def getCostAndUsage(previous, period):
 
     return round(float(cost['ResultsByTime'][0]['Total']['UnblendedCost']['Amount']), 2)
 
-def createPayload(period, slackChannel, currentCost, previousCost):
-    period = "week" if (period == 7) else "month"
+def createPayload(periodArg, slackChannel, currentCost, previousCost):
+    periodArg = "week" if (periodArg == 7) else "month"
 
-    value = f"Total cost over this {period} - *${currentCost}*\nTotal cost over last {period} - *${previousCost}*\n{getDiffrenceInPercent(currentCost, previousCost, period)}"
+    value = f"Total cost over this {periodArg} - *${currentCost}*\nTotal cost over last {periodArg} - *${previousCost}*\n{getDiffrenceInPercent(currentCost, previousCost, period)}"
 
     payload = {
         "channel": slackChannel,
