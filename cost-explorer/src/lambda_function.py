@@ -21,19 +21,29 @@ def getDiffrenceInPercent(current, previous, period):
 def getCostAndUsage(previous, period):
     now = datetime.now()
 
-    if (period == 30): 
-        sub = 1 if (previous) else 0
-        date = datetime(now.year, now.month - sub, now.day) - timedelta(days = 1)
-        start_date = date.strftime('%Y-%m-01')
-        end_date = date.strftime('%Y-%m-%d')
-    else:
-        start_date = (now - timedelta(days=period)).strftime(f'%Y-%m-%d')
-        end_date = now.strftime('%Y-%m-%d')
+    if (period == 30):
         if (previous):
-            end_date = start_date
-            start_date = (now - timedelta(days = period * 2)).strftime(f'%Y-%m-%d')
-
-    print(start_date, end_date)
+            # Check if previous year
+            if (now.month - 1 == 0):
+                start_date = (datetime(now.year - 1, 11, 1)).strftime('%Y-%m-%d')
+                end_date = (datetime(now.year - 1, 12, 1)).strftime('%Y-%m-%d')
+            elif (now.month - 1 == 1):
+                start_date = (datetime(now.year - 1, 12, 1)).strftime('%Y-%m-%d')
+                end_date = (datetime(now.year, now.month - 1, 1)).strftime('%Y-%m-%d')
+            else:
+                start_date = (datetime(now.year, now.month - 2, 1)).strftime('%Y-%m-%d')
+                end_date = (datetime(now.year, now.month - 1, 1)).strftime('%Y-%m-%d')
+        else:
+            if (now.month - 1 == 0): start_date = (datetime(now.year - 1, 12, 1)).strftime('%Y-%m-%d')
+            else: start_date = (datetime(now.year, now.month - 1, 1)).strftime('%Y-%m-%d')
+            end_date = (now).strftime('%Y-%m-%d')
+    else: 
+        if (previous):
+            start_date = (now - timedelta(days=14)).strftime('%Y-%m-%d')
+            end_date = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+        else:
+            start_date = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+            end_date = (now).strftime('%Y-%m-%d')  
     cost = client.get_cost_and_usage(
         TimePeriod = {'Start': start_date, 'End': end_date}, 
         Granularity = 'MONTHLY',
