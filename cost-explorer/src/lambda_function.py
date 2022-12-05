@@ -64,7 +64,7 @@ def createPayload(periodArg, slackChannel, currentCost, previousCost):
                 "color": "#00FF00",
                 "fields": [
                     {
-                        "title": "Costs",
+                        "title": "AWS Costs",
                         "value": value,
                         "short": False
                     },
