@@ -7,18 +7,18 @@ module "lambda" {
     "${path.module}/src"
   ]
   description = "Lambda to process API error logs and send notifications to Slack"
-  handler     = "index.handler"
-  runtime     = "nodejs16.x"
+  handler     = "lambda_function.lambda_handler"
+  runtime     = "python3.9"
   memory_size = "128"
-  timeout     = "5"
+  timeout     = "10"
 
-  cloudwatch_logs_retention_in_days = "1"
+  cloudwatch_logs_retention_in_days = "3"
 
   environment_variables = merge(tomap({
-    SLACK_ENDPOINT = var.slack_endpoint,
-    SLACK_CHANNEL  = var.slack_channel,
-    USE_LAST_INDEX = var.use_last_index,
-    LEVEL          = var.log_level
+    ERROR_CHANNEL  = var.error_channel,
+    WARN_CHANNEL   = var.warn_channel,
+    ERROR_ENDPOINT = var.error_endpoint,
+    WARN_ENDPOINT  = var.warn_endpoint
     ENVIRONMENT = var.environment, }),
     var.env
   )

@@ -47,3 +47,12 @@ variable "env" {
   description = "Lambda environment variables"
   default     = {}
 }
+
+variable "filter_pattern" {
+  type = string
+}
+
+variable "error_channel" {}
+variable "warn_channel" {}
+variable "error_endpoint" {}
+variable "warn_endpoint" {}

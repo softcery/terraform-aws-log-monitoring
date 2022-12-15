@@ -13,7 +13,7 @@ resource "aws_cloudwatch_log_subscription_filter" "subscription-filter" {
   name = "filter-${var.postfix}"
 
   log_group_name  = each.value
-  filter_pattern  = "{ $.severity = \"${var.log_level}\" }"
+  filter_pattern  = var.filter_pattern
   destination_arn = module.lambda.lambda_function_arn
 
   for_each = toset(var.log_groups)
