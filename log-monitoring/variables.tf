@@ -16,22 +16,6 @@ variable "logs_arn" {
   description = "Base arn of specifed logs"
 }
 
-variable "slack_endpoint" {
-  type        = string
-  description = "Webhook URL to the Slack channel"
-}
-
-variable "slack_channel" {
-  type        = string
-  description = "To which Slack channel notifications will be sent"
-}
-
-variable "use_last_index" {
-  type        = string
-  description = "represents whether to retrieve logs from first or last element in input"
-  default     = "true"
-}
-
 variable "environment" {
   type        = string
   description = "represents environment in which application is deployed"
