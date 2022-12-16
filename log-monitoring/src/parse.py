@@ -1,9 +1,13 @@
 import json
 
 def ParseData(logEvents):
-    firstLogEvent, lastLogEvent = json.loads(logEvents[0]), json.loads(logEvents[-1])
+    firstLogEvent, lastLogEvent = json.loads(logEvents[0]['message']), json.loads(logEvents[-1]['message'])
     data = {}
-    data['error'] = ParseErrorFields(firstLogEvent) + "; " + ParseErrorFields(lastLogEvent)
+    errorFirst, errorLast = ParseErrorFields(firstLogEvent), ParseErrorFields(lastLogEvent)
+    if (errorFirst == errorLast):
+        data['error'] = errorLast
+    else:
+        data['error'] = errorFirst + "; " + errorLast
     data['message'] = ParseMessage(lastLogEvent)
     data['RequestID'] = ParseRequestID(firstLogEvent)
     data['name'] = ParseName(firstLogEvent)

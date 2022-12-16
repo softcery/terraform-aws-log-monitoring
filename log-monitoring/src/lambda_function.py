@@ -19,10 +19,10 @@ def lambda_handler(event, context):
     log_events = payload['logEvents']
     messageObject = 0
     print(log_events) # for debug purposes
-    if (log_events[0][0:5] == "panic"):
+    if ((log_events[0]['message'])[0:5] == "panic"):
         messageObject = Panic(log_events[0], ENVIRONMENT, ERROR_CHANNEL, ERROR_ENDPOINT)
     else:
-        logEvent = json.loads(log_events[0])
+        logEvent = json.loads(log_events[0]['message'])
         if (logEvent['severity'] == 'ERROR'):
             messageObject = Error(log_events, ENVIRONMENT, ERROR_CHANNEL, ERROR_ENDPOINT)
         elif (logEvent['severity'] == 'WARN'):
