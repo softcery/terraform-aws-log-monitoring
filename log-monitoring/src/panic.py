@@ -1,6 +1,6 @@
 class Panic:
     def __init__(self, logEvent: str, environment: str, slackChannel: str, slackEndpoint: str):
-        self.error = logEvent
+        self.error = logEvent["message"]
         self.environment = environment
         self.slackChannel = slackChannel
         self.slackEndpoint = slackEndpoint
@@ -14,7 +14,7 @@ def GetPanicMessage(self: Panic):
         "attachments": [
             {
                 "mrkdwn_in": ["text"],
-                "color": "#FF00",
+                "color": "#FFA500",
                 "text": "Panic",
                 "fields": [
                     {

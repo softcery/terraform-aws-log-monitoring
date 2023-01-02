@@ -41,32 +41,3 @@ def GetWarnMessage(self: Warn):
     return payload
 
 Warn.GetMessage = GetWarnMessage
-
-
-# const message = {
-#     "channel": SLACK_CHANNEL,
-#     "attachments": [
-#       {
-# 	      "mrkdwn_in": ["text"],
-#           "color": color,
-#           "text": name,
-#           "fields": [
-#             {
-#               "title": "Details",
-#               "value": `${log.message} - ${log.err}`,
-#               "short": false
-#             },
-#             {
-#               "title": "Request ID",
-#               "value": `${requestId}`,
-#               "short": false
-#             },
-#             {
-#               "title": "Enviornment",
-#               "value": `${ENVIRONMENT}`,
-#               "short": false
-#             }
-#           ]
-#       }
-#     ]
-#   }
