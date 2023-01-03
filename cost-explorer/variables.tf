@@ -23,6 +23,11 @@ variable "period" {
   description = "Represents lambda executing interval and usage cost period"
 }
 
+variable "project" {
+  type        = string
+  description = "Represents project"
+}
+
 variable "env" {
   type        = map(string)
   description = "Lambda environment variables"

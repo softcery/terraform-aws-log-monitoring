@@ -11,6 +11,7 @@ client = boto3.client('ce')
 period = int(os.environ['PERIOD'])
 slack_endpoint = os.environ['SLACK_ENDPOINT']
 slack_channel = os.environ['SLACK_CHANNEL']
+project = os.environ['PROJECT']
 
 def getDiffrenceInPercent(current, previous, periodArg):
     dif = round((current - previous) / previous * 100, 2)
@@ -68,6 +69,11 @@ def createPayload(periodArg, slackChannel, currentCost, previousCost):
                         "value": value,
                         "short": False
                     },
+                    {
+                        "title": "Project",
+                        "value": project,
+                        "short": False
+                    },                    
                 ]
             }
         ]

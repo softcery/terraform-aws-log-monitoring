@@ -24,6 +24,7 @@ module "lambda" {
   cloudwatch_logs_retention_in_days = "1"
 
   environment_variables = merge(tomap({
+    PROJECT        = var.project
     PERIOD         = var.period
     SLACK_ENDPOINT = var.slack_endpoint,
     SLACK_CHANNEL = var.slack_channel }),
