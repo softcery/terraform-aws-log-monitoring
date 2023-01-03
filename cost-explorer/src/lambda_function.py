@@ -16,7 +16,7 @@ project = os.environ['PROJECT']
 def getDiffrenceInPercent(current, previous, periodArg):
     dif = round((current - previous) / previous * 100, 2)
     periodArg = "week" if (periodArg == 7) else "month"
-    result = f"Up *{dif}%* over last {periodArg}" if (dif > 0.0) else f"Down *{-dif}%* over last {periodArg}"
+    result = f"up {dif}%" if (dif > 0.0) else f"down {-dif}%"
     return result
 
 def getCostAndUsage(previous, period):
@@ -26,36 +26,50 @@ def getCostAndUsage(previous, period):
         if (previous):
             # Check if previous year
             if (now.month - 1 == 0):
-                start_date = (datetime(now.year - 1, 11, 1)).strftime('%Y-%m-%d')
-                end_date = (datetime(now.year - 1, 12, 1)).strftime('%Y-%m-%d')
+                start_d, end_d = datetime(now.year - 1, 11, 1), datetime(now.year - 1, 12, 1)
+                start_date = start_d.strftime('%Y-%m-%d')
+                end_date = end_d.strftime('%Y-%m-%d')
             elif (now.month - 1 == 1):
-                start_date = (datetime(now.year - 1, 12, 1)).strftime('%Y-%m-%d')
-                end_date = (datetime(now.year, now.month - 1, 1)).strftime('%Y-%m-%d')
+                start_d, end_d = datetime(now.year - 1, 12, 1), datetime(now.year, now.month - 1, 1)
+                start_date = start_d.strftime('%Y-%m-%d')
+                end_date = end_d.strftime('%Y-%m-%d')
             else:
-                start_date = (datetime(now.year, now.month - 2, 1)).strftime('%Y-%m-%d')
-                end_date = (datetime(now.year, now.month - 1, 1)).strftime('%Y-%m-%d')
+                start_d, end_d = datetime(now.year, now.month - 2, 1), datetime(now.year, now.month - 1, 1)
+                start_date = start_d.strftime('%Y-%m-%d')
+                end_date = end_d.strftime('%Y-%m-%d')
         else:
-            if (now.month - 1 == 0): start_date = (datetime(now.year - 1, 12, 1)).strftime('%Y-%m-%d')
-            else: start_date = (datetime(now.year, now.month - 1, 1)).strftime('%Y-%m-%d')
-            end_date = (now).strftime('%Y-%m-%d')
+            if (now.month - 1 == 0): 
+                start_d = datetime(now.year - 1, 12, 1)
+                start_date = start_d.strftime('%Y-%m-%d')
+            else: 
+                start_d = datetime(now.year, now.month - 1, 1)
+                start_date = start_d.strftime('%Y-%m-%d')
+            end_d = now
+            end_date = end_d.strftime('%Y-%m-%d')
     else: 
         if (previous):
-            start_date = (now - timedelta(days=14)).strftime('%Y-%m-%d')
-            end_date = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+            start_d, end_d = now - timedelta(days=14), now - timedelta(days=7)
+            start_date = start_d.strftime('%Y-%m-%d')
+            end_date = end_d.strftime('%Y-%m-%d')
         else:
-            start_date = (now - timedelta(days=7)).strftime('%Y-%m-%d')
-            end_date = (now).strftime('%Y-%m-%d')  
+            start_d, end_d = now - timedelta(days=7), now
+            start_date = start_d.strftime('%Y-%m-%d')
+            end_date = end_d.strftime('%Y-%m-%d')  
     cost = client.get_cost_and_usage(
         TimePeriod = {'Start': start_date, 'End': end_date}, 
         Granularity = 'MONTHLY',
         Metrics = ['UnblendedCost'])
 
-    return round(float(cost['ResultsByTime'][0]['Total']['UnblendedCost']['Amount']), 2)
+    return round(float(cost['ResultsByTime'][0]['Total']['UnblendedCost']['Amount']), 2), (start_d, end_d - timedelta(days=1))
 
-def createPayload(periodArg, slackChannel, currentCost, previousCost):
-    periodArg = "week" if (periodArg == 7) else "month"
+def createPayload(periodArg, slackChannel, currentCost, previousCost, dates):
 
-    value = f"Total cost over this {periodArg} - *${currentCost}*\nTotal cost over last {periodArg} - *${previousCost}*\n{getDiffrenceInPercent(currentCost, previousCost, period)}"
+    title = project + " — "
+    title += "Week" if (periodArg == 7) else "Month"
+
+    dates_value = "(" + dates[0].strftime("%b %d") + " — " + dates[1].strftime("%b %d") + ")"
+    value = f"${currentCost} — {getDiffrenceInPercent(currentCost, previousCost, period)}\n{dates_value}"
+    #value = f"Total cost over this {periodArg} - *${currentCost}*\nTotal cost over last {periodArg} - *${previousCost}*\n{getDiffrenceInPercent(currentCost, previousCost, period)}"
 
     payload = {
         "channel": slackChannel,
@@ -65,15 +79,10 @@ def createPayload(periodArg, slackChannel, currentCost, previousCost):
                 "color": "#00FF00",
                 "fields": [
                     {
-                        "title": "Project",
-                        "value": project,
-                        "short": False
-                    },                    
-                    {
-                        "title": "AWS Costs",
+                        "title": title,
                         "value": value,
                         "short": False
-                    },
+                    },    
                 ]
             }
         ]
@@ -88,8 +97,10 @@ def sendNotificationToSlack(payload, url):
         print(f"[ERROR]: Failed to send notification to Slack - status code {response.status_code}")
 
 def lambda_handler(event, context):
-    currentCost = getCostAndUsage(False, period)
-    previousCost = getCostAndUsage(True, period)
-    payload = createPayload(period, slack_channel, currentCost, previousCost)
+    currentCost, dates = getCostAndUsage(False, period)
+    previousCost = getCostAndUsage(True, period)[0]
+    payload = createPayload(period, slack_channel, currentCost, previousCost, dates)
     print(currentCost, previousCost, payload)
     sendNotificationToSlack(payload, slack_endpoint)
+
+lambda_handler(0, 0)
