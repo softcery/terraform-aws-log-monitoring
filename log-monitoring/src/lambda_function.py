@@ -23,6 +23,8 @@ def lambda_handler(event, context):
         messageObject = Panic(log_events[0], ENVIRONMENT, ERROR_CHANNEL, ERROR_ENDPOINT)
     else:
         logEvent = json.loads(log_events[0]['message'])
+        if (logEvent['name'] == 'Eye4fraudAPI.GetOrderStatus' | logEvent['name'] == 'Eye4fraud.RefreshOrders'):
+            return 0
         if (logEvent['severity'] == 'ERROR'):
             messageObject = Error(log_events, ENVIRONMENT, ERROR_CHANNEL, ERROR_ENDPOINT)
         elif (logEvent['severity'] == 'WARN'):
