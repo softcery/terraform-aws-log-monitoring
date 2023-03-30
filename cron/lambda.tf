@@ -20,4 +20,33 @@ module "lambda" {
     SECRET_NAME = var.env_secret_name}),
     var.env
   )
+  
+  attach_policy_json = true
+  policy_json        = <<-EOT
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "secretsmanager:GetSecretValue"
+                ],
+                "Resource": [
+                  "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${var.env_secret_name}*"
+                ]
+            }
+            {
+                "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey"
+                ],
+                "Effect": "Allow",
+                "Resource": [
+                    "${var.kms_key_arn}"
+                ]
+            }
+        ]
+    }
+  EOT
 }
+
