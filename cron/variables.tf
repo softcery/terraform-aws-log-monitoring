@@ -4,19 +4,12 @@ variable "env" {
   default     = {}
 }
 
-variable "env_hostname" {
+variable "env_url" {
   type        = string
-  description = "represents hostname of the resource"
 }
 
-variable "env_method" {
+variable "env_secret" {
   type        = string
-  description = "represents HTTP request method"
-}
-
-variable "env_environment" {
-  type        = string
-  description = "represents environment in which cron is deployed"
 }
 
 variable "interval" {
@@ -30,17 +23,7 @@ variable "postfix" {
   default     = ""
 }
 
-variable "runtime" {
-  type        = string
-  description = "represents lambda function runtime environment"
-}
-
-variable "handler" {
-  type        = string
-  description = "represents lambda function handler"
-}
-
-variable "timeout" {
-  type        = number
-  description = "represents the maximum time allowed for lambda to run"
+variable "cloudwatch_logs_retention_in_days" {
+  type = number
+  default = 1
 }

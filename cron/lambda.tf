@@ -1,6 +1,6 @@
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "~> 4.0"
+  version = "~> 4.12.1"
 
   function_name = "cron-lambda-${var.postfix}"
   source_path = [
@@ -8,17 +8,16 @@ module "lambda" {
   ]
 
   description = "Cron Lambda"
-  handler     = var.handler
-  runtime     = var.runtime
+  handler     = "lambda_function.lambda_handler"
+  runtime     = "python3.9"
   memory_size = "128"
-  timeout     = var.timeout
+  timeout     = "10"
 
-  cloudwatch_logs_retention_in_days = "1"
+  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
 
   environment_variables = merge(tomap({
-    HOSTNAME = var.env_hostname,
-    METHOD   = var.env_method,
-    ENVIRONMENT = var.env_environment }),
+    URL = var.env_url,
+    SECRET = var.env_secret}),
     var.env
   )
 }
