@@ -17,7 +17,7 @@ module "lambda" {
 
   environment_variables = merge(tomap({
     URL = var.env_url,
-    SECRET = var.env_secret}),
+    SECRET_NAME = var.env_secret_name}),
     var.env
   )
 }

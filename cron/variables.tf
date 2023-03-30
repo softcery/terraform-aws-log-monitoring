@@ -8,7 +8,7 @@ variable "env_url" {
   type        = string
 }
 
-variable "env_secret" {
+variable "env_secret_name" {
   type        = string
 }
 
