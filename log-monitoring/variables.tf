@@ -10,12 +10,6 @@ variable "postfix" {
   default     = ""
 }
 
-# arn:aws:logs:us-east-2:123456789:
-variable "logs_arn" {
-  type        = string
-  description = "Base arn of specifed logs"
-}
-
 variable "environment" {
   type        = string
   description = "represents environment in which application is deployed"
@@ -31,7 +25,19 @@ variable "filter_pattern" {
   type = string
 }
 
-variable "error_channel" {}
-variable "warn_channel" {}
-variable "error_endpoint" {}
-variable "warn_endpoint" {}
+variable "error_channel" {
+  type = string
+  default = " "
+}
+variable "warn_channel" {
+  type = string
+  default = " "
+}
+variable "error_endpoint" {
+  type = string
+  default = " "
+}
+variable "warn_endpoint" {
+  type = string
+  default = " "
+}

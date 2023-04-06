@@ -1,6 +1,6 @@
 module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "~> 4.0"
+  version = "~> 4.13.0"
 
   function_name = "lambda-${var.postfix}"
   source_path = [
