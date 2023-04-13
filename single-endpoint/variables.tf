@@ -31,7 +31,3 @@ variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 1
 }
-
-variable "kms_key_arn" {
-  type = string
-}
