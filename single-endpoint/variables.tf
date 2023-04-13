@@ -5,11 +5,15 @@ variable "env" {
 }
 
 variable "env_url" {
-  type        = string
+  type = string
 }
 
-variable "env_secret_name" {
-  type        = string
+variable "env_secret" {
+  type = string
+}
+
+variable "env_interval" {
+  type = string
 }
 
 variable "interval" {
@@ -17,14 +21,14 @@ variable "interval" {
   description = "represents interval with which lambda will be called"
 }
 
-variable "postfix" {
+variable "name" {
   type        = string
-  description = "represents postfix to add to names of created resources"
+  description = "name"
   default     = ""
 }
 
 variable "cloudwatch_logs_retention_in_days" {
-  type = number
+  type    = number
   default = 1
 }
 
