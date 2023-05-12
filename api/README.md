@@ -1,0 +1,1 @@
+Creates Cloudwatch log group, ECS service, ECR, ALB and Route53 Alias to ALB

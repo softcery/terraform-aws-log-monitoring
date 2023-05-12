@@ -1,0 +1,2 @@
+Creates a Lambda function that uses Cost Explorer API to retrieve costs for the specified period(week/month) and compares with the previous period and sends notification to Slack.
+Function is called automatically using EventBridge rule

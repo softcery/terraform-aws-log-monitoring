@@ -1,0 +1,1 @@
+Creates infrastructure for serving static files in S3 through Cloudfront

@@ -1,0 +1,1 @@
+Creates a lambda function that sends a PUT request to the specified URL and also retrieves access token from Cognito using Secrets
