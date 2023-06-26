@@ -9,7 +9,7 @@ output "acm_cert_cdn_arn" {
 
 # dns
 output "name_server_r53" {
-  value = [aws_route53_zone.base.name_servers]
+  value = aws_route53_zone.base.name_servers
 }
 
 # sns
