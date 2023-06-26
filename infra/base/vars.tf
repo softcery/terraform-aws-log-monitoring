@@ -196,6 +196,17 @@ variable "rds_disk-depth_threshold" {
   default     = "64"
 }
 
+# budgets
+variable "budget_limit" {
+  description = "monthly limit for a budget"
+  type = string
+}
+
+variable "budget_email_subscribers" {
+  description = "Subscribers of budget alert notification"
+  type = list(string)
+}
+
 
 locals {
   tags = {

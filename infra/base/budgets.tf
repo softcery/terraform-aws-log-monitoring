@@ -1,7 +1,7 @@
 resource "aws_budgets_budget" "monthly" {
   name         = "monthly-${var.name}"
   budget_type  = "COST"
-  limit_amount = "300"
+  limit_amount = var.budget_limit
   limit_unit   = "USD"
   time_unit    = "MONTHLY"
 
@@ -11,7 +11,7 @@ resource "aws_budgets_budget" "monthly" {
     threshold_type             = "PERCENTAGE"
     notification_type          = "FORECASTED"
     subscriber_sns_topic_arns  = [aws_sns_topic.budget_notification.arn]
-    subscriber_email_addresses = ["elijah.atamas@softcery.com", "faris@rresidential.com", "vladyslav.skorokhod@softcery.com", "danylo.ostrikov@softcery.com"]
+    subscriber_email_addresses = [var.budget_email_subscribers]
   }
 
   notification {
@@ -20,7 +20,7 @@ resource "aws_budgets_budget" "monthly" {
     threshold_type             = "PERCENTAGE"
     notification_type          = "ACTUAL"
     subscriber_sns_topic_arns  = [aws_sns_topic.budget_notification.arn]
-    subscriber_email_addresses = ["elijah.atamas@softcery.com", "faris@rresidential.com", "vladyslav.skorokhod@softcery.com", "danylo.ostrikov@softcery.com"]
+    subscriber_email_addresses = [var.budget_email_subscribers]
   }
 
   notification {
@@ -29,7 +29,7 @@ resource "aws_budgets_budget" "monthly" {
     threshold_type             = "PERCENTAGE"
     notification_type          = "FORECASTED"
     subscriber_sns_topic_arns  = [aws_sns_topic.budget_notification.arn]
-    subscriber_email_addresses = ["elijah.atamas@softcery.com", "faris@rresidential.com", "vladyslav.skorokhod@softcery.com", "danylo.ostrikov@softcery.com"]
+    subscriber_email_addresses = [var.budget_email_subscribers]
   }
 
   notification {
@@ -38,7 +38,7 @@ resource "aws_budgets_budget" "monthly" {
     threshold_type             = "PERCENTAGE"
     notification_type          = "ACTUAL"
     subscriber_sns_topic_arns  = [aws_sns_topic.budget_notification.arn]
-    subscriber_email_addresses = ["elijah.atamas@softcery.com", "faris@rresidential.com", "vladyslav.skorokhod@softcery.com", "danylo.ostrikov@softcery.com"]
+    subscriber_email_addresses = [var.budget_email_subscribers]
   }
 }
 
