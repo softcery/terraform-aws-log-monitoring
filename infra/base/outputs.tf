@@ -7,6 +7,11 @@ output "acm_cert_cdn_arn" {
   value = module.acm_cert_cdn.arn
 }
 
+# dns
+output "name_server_r53" {
+  value = [aws_route53_zone.base.name_servers]
+}
+
 # sns
 output "sns_budget_arn" {
   value = aws_sns_topic.budget_notification.arn
