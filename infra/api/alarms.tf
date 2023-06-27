@@ -6,7 +6,7 @@ module "metric_alarm_cpu" {
   alarm_description   = "CpuUtilized in ${var.name}"
   metric_name         = "CpuUtilized"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = var.alarm_evaluation_periods
+  evaluation_periods  = var.alarm_cpu_evaluation_periods
   threshold           = var.cpu_threshold
   period              = var.alarm_period
   statistic           = "Average"
@@ -29,7 +29,7 @@ module "metric_alarm_memory" {
   alarm_description   = "MemoryUtilized in ${var.name}"
   metric_name         = "MemoryUtilized"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = var.alarm_evaluation_periods
+  evaluation_periods  = var.alarm_memory_evaluation_periods
   threshold           = var.memory_threshold
   period              = var.alarm_period
   statistic           = "Average"

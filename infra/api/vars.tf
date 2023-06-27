@@ -143,6 +143,18 @@ variable "alarm_evaluation_periods" {
   default     = "1"
 }
 
+variable "alarm_memory_evaluation_periods" {
+  description = "Evaluation periods of metrics for alarms to trigger"
+  type        = string
+  default     = "1"
+}
+
+variable "alarm_cpu_evaluation_periods" {
+  description = "Evaluation periods of metrics for alarms to trigger"
+  type        = string
+  default     = "1"
+}
+
 variable "alarm_period" {
   description = "Period of time (in secods) for alarm to trigger"
   type        = string
