@@ -20,7 +20,7 @@ resource "aws_cloudwatch_dashboard" "logs" {
             "properties": {
                 "region": "${var.region}",
                 "title": "Application logs",
-                "query": "SOURCE '${var.name}' | fields @timestamp, @message, @logStream, @log | sort @timestamp desc | filter @message not like \"ping\" | limit 100"
+                "query": "SOURCE '${var.name}' | fields @timestamp, @message, @logStream, @log | sort @timestamp desc | filter @message not like \"ping\" | limit 100",
                 "view": "table"
             }
         }
