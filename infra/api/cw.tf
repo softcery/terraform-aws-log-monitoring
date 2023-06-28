@@ -13,10 +13,10 @@ resource "aws_cloudwatch_dashboard" "logs" {
     "widgets": [
         {
             "type": "log",
-            "x": 12,
-            "y": 24,
-            "width": 12,
-            "height": 6,
+            "x": 0,
+            "y": 0,
+            "width": 24,
+            "height": 14,
             "properties": {
                 "region": "${var.region}",
                 "title": "Application logs",
